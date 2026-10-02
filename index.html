@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Caliper QA — Verification for AI-generated and business-critical work</title>
+<meta name="description" content="Caliper QA is an independent testing and evaluation practice. AI feature evaluation, Salesforce CPQ and quote-to-cash audits, quality engineering, and reporting you can show an auditor.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0F3B45;
+    --ink-2:#17545f;
+    --mint:#00A88F;
+    --paper:#FBFAF7;
+    --paper-2:#F1EFE9;
+    --line:rgba(15,59,69,.16);
+    --text:#0F3B45;
+    --muted:#4b6a72;
+    --bg:var(--paper);
+    --card:#ffffff;
+    --shadow:0 1px 0 rgba(15,59,69,.06);
+    --measure:64ch;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --bg:#08222a;
+      --card:#0d2f38;
+      --paper-2:#0b2a32;
+      --text:#e8f1ef;
+      --muted:#9fb9bd;
+      --line:rgba(232,241,239,.18);
+      --ink:#e8f1ef;
+      --shadow:none;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#08222a;
+    --card:#0d2f38;
+    --paper-2:#0b2a32;
+    --text:#e8f1ef;
+    --muted:#9fb9bd;
+    --line:rgba(232,241,239,.18);
+    --ink:#e8f1ef;
+    --shadow:none;
+  }
+  *,*::before,*::after{box-sizing:inherit}
+  html{scroll-behavior:smooth;scroll-padding-top:calc(72px + env(safe-area-inset-top,0px))}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:"Inter Tight",system-ui,-apple-system,"Segoe UI",sans-serif;
+    font-size:17px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{width:min(1080px,92vw);margin-inline:auto}
+  h1,h2,h3{font-family:Fraunces,Georgia,"Times New Roman",serif;font-weight:600;line-height:1.1;margin:0}
+  h1{font-size:clamp(2.4rem,5.4vw,4rem);letter-spacing:-.015em}
+  h2{font-size:clamp(1.6rem,3vw,2.2rem);letter-spacing:-.01em}
+  h3{font-size:1.12rem;font-weight:600;line-height:1.3}
+  p{margin:0 0 1rem;max-width:var(--measure)}
+  a{color:inherit}
+  section{padding:clamp(3.5rem,8vw,6rem) 0;border-top:1px solid var(--line)}
+
+  /* header */
+  header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .bar{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.9rem 0}
+  .logo{display:flex;align-items:baseline;gap:.5rem;font-family:Fraunces,serif;font-size:1.2rem;font-weight:600;text-decoration:none;letter-spacing:-.01em}
+  .logo span{color:var(--mint)}
+  nav{display:flex;align-items:center;gap:1.4rem}
+  nav a{font-size:.95rem;color:var(--muted);text-decoration:none}
+  nav a:hover{color:var(--mint)}
+  @media(max-width:760px){nav a:not(.btn){display:none}}
+  .btn{display:inline-block;background:var(--mint);color:#04262b;font-weight:600;font-size:.95rem;padding:.6rem 1.1rem;border-radius:2px;text-decoration:none;border:1px solid var(--mint)}
+  .btn:hover{background:transparent;color:var(--mint)}
+  .btn.ghost{background:transparent;color:var(--text);border-color:var(--line)}
+  .btn.ghost:hover{border-color:var(--mint);color:var(--mint)}
+  .toggle{background:none;border:1px solid var(--line);color:var(--muted);border-radius:2px;padding:.45rem .6rem;font:inherit;font-size:.85rem;cursor:pointer}
+  .toggle:hover{color:var(--mint);border-color:var(--mint)}
+  :focus-visible{outline:2px solid var(--mint);outline-offset:3px}
+
+  /* hero */
+  .hero{padding:clamp(4rem,10vw,7.5rem) 0 clamp(3rem,7vw,5rem);border-top:0}
+  .hero p.lede{font-size:1.15rem;color:var(--muted);max-width:56ch;margin-top:1.4rem}
+  .gauge{display:flex;align-items:stretch;gap:0;margin:2.6rem 0 0;border:1px solid var(--line);border-radius:2px;overflow:hidden;background:var(--card)}
+  .gauge div{flex:1;padding:1.1rem 1.2rem;border-right:1px solid var(--line)}
+  .gauge div:last-child{border-right:0}
+  .gauge b{display:block;font-family:Fraunces,serif;font-size:1.5rem;color:var(--mint);font-weight:600}
+  .gauge small{color:var(--muted);font-size:.9rem;line-height:1.35;display:block;margin-top:.15rem}
+  @media(max-width:760px){.gauge{flex-direction:column}.gauge div{border-right:0;border-bottom:1px solid var(--line)}}
+  .cta-row{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:2.2rem}
+
+  /* services */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:2px;margin-top:2.4rem}
+  .card{background:var(--card);padding:1.6rem 1.5rem}
+  .card p{font-size:.97rem;color:var(--muted);margin-bottom:.9rem}
+  .rate{font-size:.9rem;color:var(--text);font-weight:600}
+  .feature{grid-column:1/-1;background:var(--card);padding:2rem 1.8rem;border-left:3px solid var(--mint)}
+  .feature h3{font-size:1.5rem;font-family:Fraunces,serif}
+  .feature ol{margin:1.2rem 0 0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.2rem}
+  .feature ol li{border-top:2px solid var(--mint);padding-top:.7rem;font-size:.95rem;color:var(--muted)}
+  .feature ol strong{display:block;color:var(--text);font-size:1rem}
+
+  /* process */
+  .steps{counter-reset:s;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.6rem;margin-top:2.4rem;padding:0;list-style:none}
+  .steps li{counter-increment:s;border-top:1px solid var(--line);padding-top:1rem}
+  .steps li::before{content:counter(s);font-family:Fraunces,serif;font-size:1.6rem;color:var(--mint);display:block;line-height:1}
+  .steps h3{margin:.4rem 0 .35rem}
+  .steps p{font-size:.95rem;color:var(--muted);margin:0}
+
+  /* stack */
+  .chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.8rem;max-width:var(--measure)}
+  .chips span{border:1px solid var(--line);border-radius:2px;padding:.35rem .7rem;font-size:.9rem;color:var(--muted);background:var(--card)}
+
+  /* about */
+  .two{display:grid;grid-template-columns:1.2fr 1fr;gap:clamp(2rem,5vw,4rem);align-items:start}
+  @media(max-width:860px){.two{grid-template-columns:1fr}}
+  .commit{list-style:none;margin:0;padding:0;background:var(--card);border:1px solid var(--line);border-radius:2px}
+  .commit li{padding:.85rem 1.1rem;border-bottom:1px solid var(--line);font-size:.95rem;color:var(--muted)}
+  .commit li:last-child{border-bottom:0}
+  .commit strong{color:var(--text);font-weight:600}
+
+  /* pricing */
+  .price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:2px;margin-top:2.4rem}
+  .price{background:var(--card);padding:1.7rem 1.5rem}
+  .price .amount{font-family:Fraunces,serif;font-size:2rem;color:var(--text);display:block;margin:.5rem 0 .2rem;line-height:1}
+  .price .amount small{font-family:"Inter Tight",sans-serif;font-size:.85rem;color:var(--muted);font-weight:400}
+  .price ul{margin:1rem 0 0;padding:0;list-style:none;font-size:.95rem;color:var(--muted)}
+  .price li{padding:.3rem 0;border-bottom:1px dotted var(--line)}
+  .price li:last-child{border-bottom:0}
+  .note{font-size:.92rem;color:var(--muted);margin-top:1.4rem}
+
+  /* contact */
+  .contact-box{background:var(--card);border:1px solid var(--line);border-radius:2px;padding:clamp(1.8rem,4vw,2.6rem);margin-top:2rem}
+  .mail{font-family:Fraunces,serif;font-size:clamp(1.3rem,3.4vw,2rem);color:var(--mint);text-decoration:none;word-break:break-all}
+  .mail:hover{text-decoration:underline}
+  footer{border-top:1px solid var(--line);padding:2rem 0 3rem;color:var(--muted);font-size:.9rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.6rem}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="#top">Caliper<span>QA</span></a>
+    <nav>
+      <a href="#services">Services</a>
+      <a href="#process">How it works</a>
+      <a href="#pricing">Pricing</a>
+      <button class="toggle" id="themeToggle" aria-label="Switch color theme">Dark</button>
+      <a class="btn" href="#contact">Book a call</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<div class="wrap hero">
+  <h1>Proof that the work holds up.</h1>
+  <p class="lede">Caliper QA is an independent testing and evaluation practice for teams shipping AI features and revenue-critical systems. You get evidence an auditor, a regulator, or your own board can read.</p>
+  <div class="cta-row">
+    <a class="btn" href="#contact">Book a 30-minute call</a>
+    <a class="btn ghost" href="#services">See what I test</a>
+  </div>
+  <div class="gauge">
+    <div><b>3 days</b><small>From call to written proposal</small></div>
+    <div><b>Weekly</b><small>Delivery with a status note, every week</small></div>
+    <div><b>One senior</b><small>The person you talk to does the work</small></div>
+  </div>
+</div>
+
+<section id="services">
+  <div class="wrap">
+    <h2>What I test</h2>
+    <p>Four practice areas, one operator. Engagements run as fixed-scope projects, monthly retainers, or blocks of hours.</p>
+
+    <div class="grid">
+      <article class="feature">
+        <h3>Auditable verification of AI-generated work</h3>
+        <p>Healthcare, finance, and insurance teams are shipping AI features into processes that get examined later. The question is not whether the model sounds right. It is whether you can show, months from now, how a given output was checked and what happened when it failed. I build that record.</p>
+        <ol>
+          <li><strong>Diagnose</strong>Map where AI output enters your process, what a wrong answer costs, and what evidence you are missing today.</li>
+          <li><strong>Execute</strong>Build the evaluation set, run it against your feature, and document failure modes with reproducible cases.</li>
+          <li><strong>Verify</strong>Hand over a scored report, a regression suite your team can rerun, and the paper trail for whoever asks.</li>
+        </ol>
+        <p class="rate" style="margin-top:1.4rem">Projects from $5,400 · $110/hour</p>
+      </article>
+
+      <article class="card">
+        <h3>Salesforce CPQ and quote-to-cash</h3>
+        <p>Pricing rules that fire in the wrong order, quotes that do not match the invoice, renewals that quietly drop a discount. I audit the full path from quote to cash, including Logik.io configurations, and give you the failing cases in writing.</p>
+        <p class="rate">Audits from $4,800 · $120/hour</p>
+      </article>
+
+      <article class="card">
+        <h3>Quality engineering and automation</h3>
+        <p>Test strategy, automation frameworks that survive contact with a release schedule, API and integration coverage, load and performance testing, and a plan for the flaky suite nobody trusts anymore.</p>
+        <p class="rate">Projects from $3,900 · $85/hour</p>
+      </article>
+
+      <article class="card">
+        <h3>Data, BI, and reporting</h3>
+        <p>Reconciliation between source systems and dashboards, validation of the numbers leadership acts on, and checks that keep running after I leave.</p>
+        <p class="rate">Projects from $3,900 · $85/hour</p>
+      </article>
+
+      <article class="card">
+        <h3>Release readiness reviews</h3>
+        <p>A short, fixed-scope look at whether a specific release is safe to ship: coverage gaps, risk ranking, and the three things worth fixing first.</p>
+        <p class="rate">From $3,900</p>
+      </article>
+
+      <article class="card">
+        <h3>QA process assessment</h3>
+        <p>For teams whose testing grew by accident. I review how work moves from ticket to production, then hand back a written plan your team can run without me.</p>
+        <p class="rate">From $3,900</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="process">
+  <div class="wrap">
+    <h2>How an engagement runs</h2>
+    <ol class="steps">
+      <li>
+        <h3>Call</h3>
+        <p>Thirty minutes, free. You describe the system and what you are afraid of. I tell you whether I am the right person.</p>
+      </li>
+      <li>
+        <h3>Proposal</h3>
+        <p>Within three business days: scope, price, dates, and what you receive. If it is not a fit, I say so and point you elsewhere.</p>
+      </li>
+      <li>
+        <h3>Work</h3>
+        <p>Weekly delivery with a status note. No silence between kickoff and the final report.</p>
+      </li>
+      <li>
+        <h3>Handover</h3>
+        <p>Findings, reproducible cases, and anything automated stays with you. Thirty days of support afterwards.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section id="stack">
+  <div class="wrap">
+    <h2>Tools I work in</h2>
+    <p>Whatever you already use comes first. These are the ones I know well enough to be productive in on day one.</p>
+    <div class="chips">
+      <span>Playwright</span><span>JavaScript</span><span>Python</span><span>Pytest</span>
+      <span>Postman</span><span>JMeter</span><span>BlazeMeter</span><span>REST and GraphQL</span>
+      <span>SQL</span><span>C#</span><span>Salesforce CPQ</span><span>Logik.io</span>
+      <span>GitHub Actions</span><span>AWS CloudWatch</span><span>Datadog</span><span>Power BI</span>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap two">
+    <div>
+      <h2>Who you are hiring</h2>
+      <p>I am Fabián Arce. Nineteen years in enterprise systems, eleven of them in quality engineering. Before that I built ETL pipelines and reporting systems for Procter &amp; Gamble, which is why reconciliation work comes naturally: I have been on both sides of the data, building the pipeline and then breaking it.</p>
+      <p>Most of my career has been spent on software that moves money. Four years owning quality end to end on a digital banking platform — accounts, authorization, interbank transfers, check processing, and the reconciliation between them. Then Salesforce CPQ and Logik.io at Teradyne: product configuration, pricing rules, approvals, bundles, discounts, and everything downstream to invoicing. Caliper QA is how I take that work directly to the teams that need it, without a layer of account managers in between.</p>
+      <p>Most of what I find lives at the edges. The order with one line item priced at zero. The renewal that crosses a fiscal year. The customer record with an apostrophe in the name. The AI response that is confidently wrong only when the input is empty. Happy paths get tested by everyone; the cases that reach production untested are the ones nobody thought to write down, and finding them is the part of this work I am best at.</p>
+      <p>I work from Heredia, Costa Rica, in US time zones, and I contract as an independent professional. The person on the call is the person who runs the tests and writes the report.</p>
+    </div>
+    <div>
+      <ul class="commit">
+        <li><strong>Free first call.</strong> Thirty minutes, no pitch deck.</li>
+        <li><strong>Proposal in three business days.</strong></li>
+        <li><strong>Weekly delivery</strong> with a written status note.</li>
+        <li><strong>Thirty days of support</strong> after handover.</li>
+        <li><strong>Unused retainer hours</strong> roll into the next month.</li>
+        <li><strong>Thirty days' notice</strong> to end a retainer, either side.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="wrap">
+    <h2>Pricing</h2>
+    <p>Published, so you know before the call whether this fits your budget.</p>
+    <div class="price-grid">
+      <div class="price">
+        <h3>Fixed-scope project</h3>
+        <span class="amount">from $3,900</span>
+        <ul>
+          <li>AI feature evaluation from $5,400</li>
+          <li>CPQ and quote-to-cash audit from $4,800</li>
+          <li>50% to start, 50% on delivery</li>
+        </ul>
+      </div>
+      <div class="price">
+        <h3>Monthly retainer</h3>
+        <span class="amount">$4,200 <small>/ 60 hours</small></span>
+        <ul>
+          <li>$7,800 for 120 hours</li>
+          <li>Billed at the start of each month</li>
+          <li>Unused hours roll over once</li>
+        </ul>
+      </div>
+      <div class="price">
+        <h3>Blocks of hours</h3>
+        <span class="amount">$85 <small>/ hour</small></span>
+        <ul>
+          <li>AI evaluation $110/hour</li>
+          <li>Salesforce CPQ $120/hour</li>
+          <li>Ten-hour minimum, prepaid</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note">Every engagement starts with a signed statement of work covering scope, price, payment dates, intellectual property, and notice. Invoices are net 7, paid by ACH or wire in US dollars.</p>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <h2>Start with a call</h2>
+    <div class="contact-box">
+      <p>Tell me what system you are worried about and when you need an answer. I reply the same business day.</p>
+      <a class="mail" href="mailto:fabian@caliperqa.com">fabian@caliperqa.com</a>
+      <p class="note">Based in Heredia, Costa Rica. Available 8am–6pm Central Time. Contracts in English, invoiced in US dollars.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="wrap">
+  <span>Caliper QA — independent software testing and AI evaluation</span>
+  <span>Fabián Arce · Heredia, Costa Rica</span>
+</footer>
+
+<script>
+  (function(){
+    var root=document.documentElement, btn=document.getElementById('themeToggle');
+    function current(){
+      var set=root.getAttribute('data-theme');
+      if(set==='dark'||set==='light') return set;
+      return window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+    }
+    function paint(){ btn.textContent = current()==='dark' ? 'Light' : 'Dark'; }
+    btn.addEventListener('click',function(){
+      root.setAttribute('data-theme', current()==='dark'?'light':'dark');
+      paint();
+    });
+    paint();
+  })();
+</script>
+</body>
+</html>
