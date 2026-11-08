@@ -5,14 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Caliper QA — Testing for systems that move money</title>
 <meta name="description" content="Caliper QA is an independent testing and evaluation practice run by Fabián Arce. Salesforce CPQ and quote-to-cash audits, AI feature evaluation, API and performance testing, and reports you can show an auditor.">
-<meta name="theme-color" content="#E6EAED">
+<meta name="theme-color" content="#22409A">
+<link rel="alternate" hreflang="es" href="https://caliperqa.com/es/">
+<link rel="alternate" hreflang="en" href="https://caliperqa.com/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,400..800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --steel:#E6EAED;
-    --plate:#F6F8F9;
+    --steel:#F7F9FB;
+    --plate:#FFFFFF;
+    --grid:rgba(43,68,217,.07);
     --ink:#172238;
     --muted:#4E5B69;
     --layout:#2B44D9;
@@ -24,13 +27,13 @@
   }
   @media (prefers-color-scheme:dark){
     :root:not([data-theme="light"]){
-      --steel:#10161C; --plate:#18212B; --ink:#E6EBEF; --muted:#9AA7B4;
+      --steel:#10161C; --plate:#18212B; --ink:#E6EBEF; --muted:#9AA7B4; --grid:rgba(140,157,255,.06);
       --layout:#8C9DFF; --layout-ink:#0E1430;
       --rule:rgba(230,235,239,.13); --rule-strong:rgba(230,235,239,.3);
     }
   }
   :root[data-theme="dark"]{
-    --steel:#10161C; --plate:#18212B; --ink:#E6EBEF; --muted:#9AA7B4;
+    --steel:#10161C; --plate:#18212B; --ink:#E6EBEF; --muted:#9AA7B4; --grid:rgba(140,157,255,.06);
     --layout:#8C9DFF; --layout-ink:#0E1430;
     --rule:rgba(230,235,239,.13); --rule-strong:rgba(230,235,239,.3);
   }
@@ -42,7 +45,12 @@
     font-family:var(--text);font-size:18px;line-height:1.6;
     -webkit-font-smoothing:antialiased;
     padding-bottom:env(safe-area-inset-bottom,0px);
+    background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+    background-size:24px 24px;
   }
+  /* blue band: header + hero */
+  .band{--steel:#22409A;--plate:#2B4BAB;--ink:#F3F6FF;--muted:#C9D3F3;--layout:#FFFFFF;--layout-ink:#1D3891;--rule:rgba(255,255,255,.16);--rule-strong:rgba(255,255,255,.36);background-color:#22409A;color:var(--ink)}
+  .hero-band{background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:24px 24px}
   .wrap{width:min(1120px,100% - 32px);margin-inline:auto}
   h1,h2{font-family:var(--display);font-weight:700;margin:0;line-height:1}
   h1{font-size:clamp(2.6rem,6.6vw,5.6rem);font-stretch:135%;letter-spacing:-.02em;max-width:14ch}
@@ -53,17 +61,18 @@
   :focus-visible{outline:2px solid var(--layout);outline-offset:3px;border-radius:2px}
 
   /* header */
-  header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--steel) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);padding-top:env(safe-area-inset-top,0px)}
+  header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,#22409A 94%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);padding-top:env(safe-area-inset-top,0px)}
   .bar{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.85rem 0}
   .logo{display:flex;align-items:center;gap:.6rem;text-decoration:none;font-family:var(--display);font-stretch:140%;font-weight:700;font-size:1.15rem;letter-spacing:-.01em}
   .logo svg{width:26px;height:26px;flex:none}
-  .logo .mark-beam{fill:var(--ink)} .logo .mark-jaw{fill:var(--layout)}
+  .logo .mark-beam{fill:var(--ink)} .logo .mark-jaw{fill:#9FB2FF}
   nav{display:flex;align-items:center;gap:1.4rem}
   nav a{font-size:.95rem;color:var(--muted);text-decoration:none}
   nav a:hover{color:var(--ink)}
   @media(max-width:780px){nav a.navlink{display:none}nav{gap:.6rem}}
   .logo,.btn,.toggle{white-space:nowrap}
-  @media(max-width:400px){.logo{font-size:1rem}}
+  nav a.lang{font-weight:600;color:var(--ink)}
+  @media(max-width:440px){.toggle{display:none}.logo{font-size:1rem}}
   .btn{display:inline-flex;align-items:center;gap:.5rem;background:var(--layout);color:var(--layout-ink);font-weight:600;font-size:.98rem;padding:.7rem 1.15rem;border-radius:4px;text-decoration:none;border:1px solid var(--layout);transition:background-color .15s,color .15s}
   .btn:hover{background:transparent;color:var(--layout)}
   .btn.quiet{background:transparent;color:var(--ink);border-color:var(--rule-strong)}
@@ -84,6 +93,7 @@
   .caliper .num text{fill:var(--muted);font:600 13px var(--text);text-anchor:middle}
   .caliper .jaw{fill:var(--ink)}
   .caliper .plate{fill:var(--layout)}
+  .caliper .vscale line{stroke:var(--layout-ink)}
   .caliper .vscale line{stroke:var(--layout-ink);stroke-width:1.2}
   .caliper .grip{fill:none;stroke:var(--layout-ink);stroke-opacity:.45;stroke-width:1}
   .caliper .slider{transform:translateX(437px);animation:slide 1.9s cubic-bezier(.2,.75,.15,1) .35s both}
@@ -92,7 +102,7 @@
   @media(max-width:600px){.caliper .num{display:none}}
 
   .readings{list-style:none;margin:1.4rem 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
-  .readings li{border-left:2px solid var(--layout);padding:.1rem 0 .1rem .9rem;font-size:.97rem;color:var(--muted)}
+  .readings li{border-left:2px solid #9FB2FF;padding:.1rem 0 .1rem .9rem;font-size:.97rem;color:var(--muted)}
   .readings strong{display:block;color:var(--ink);font-weight:600}
   @media(max-width:700px){.readings{grid-template-columns:1fr;gap:1rem}}
 
@@ -177,7 +187,7 @@
 </head>
 <body>
 
-<header>
+<header class="band">
   <div class="wrap bar">
     <a class="logo" href="#top" aria-label="Caliper QA, back to top">
       <svg viewBox="0 0 26 26" aria-hidden="true"><rect class="mark-beam" x="1" y="3" width="24" height="6" rx="1"/><path class="mark-beam" d="M1 3h5v20H3l-2-6z"/><path class="mark-jaw" d="M14 9h6v14h-4l-2-6z"/></svg>
@@ -187,6 +197,7 @@
       <a class="navlink" href="#services">Services</a>
       <a class="navlink" href="#process">How it works</a>
       <a class="navlink" href="#pricing">Pricing</a>
+      <a class="lang" href="/es/" hreflang="es" lang="es" aria-label="Ver el sitio en español">ES</a>
       <button class="toggle" id="themeToggle" type="button">Dark</button>
       <a class="btn" href="#contact">Book a call</a>
     </nav>
@@ -195,7 +206,7 @@
 
 <main id="top">
 
-<section class="wrap hero" aria-labelledby="hero-title">
+<section class="band hero-band" aria-labelledby="hero-title"><div class="wrap hero">
   <h1 id="hero-title">Proof that the work holds up.</h1>
   <p class="lede">Caliper QA tests the systems that cost real money when they break: quote-to-cash, payments, the APIs underneath them, and the AI features now making decisions inside both. One senior engineer with nineteen years in enterprise systems. The person on the call is the person who does the work.</p>
   <div class="cta-row">
@@ -218,11 +229,11 @@
 </svg>
     <ul class="readings">
       <li><strong>Proposal in 3 business days</strong>From the first call to scope, price and dates in writing.</li>
-      <li><strong>Weekly delivery</strong>A written status note every week, from kickoff to handover.</li>
+      <li><strong>Senior work at nearshore rates</strong>From $85 an hour, published up front, in your time zone.</li>
       <li><strong>One senior engineer</strong>No account managers between you and the work.</li>
     </ul>
   </div>
-</section>
+</div></section>
 
 <section class="block" id="services" aria-labelledby="services-title">
   <div class="wrap">
@@ -335,7 +346,7 @@
   <div class="wrap">
     <div class="block-head">
       <h2 id="pricing-title">Pricing</h2>
-      <p>Published, so you know before the call whether this fits your budget.</p>
+      <p>Nineteen years of experience at nearshore rates. You get senior-level testing in US time zones for a fraction of what a US consultancy bills, and the price is published so you know before the call.</p>
     </div>
     <div class="prices">
       <div class="tier">
