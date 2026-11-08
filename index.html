@@ -15,10 +15,10 @@
   :root{
     --steel:#F7F9FB;
     --plate:#FFFFFF;
-    --grid:rgba(43,68,217,.07);
+    
     --ink:#172238;
     --muted:#4E5B69;
-    --layout:#2B44D9;
+    --layout:#3B59A8;
     --layout-ink:#FFFFFF;
     --rule:rgba(23,34,56,.15);
     --rule-strong:rgba(23,34,56,.32);
@@ -45,12 +45,9 @@
     font-family:var(--text);font-size:18px;line-height:1.6;
     -webkit-font-smoothing:antialiased;
     padding-bottom:env(safe-area-inset-bottom,0px);
-    background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
-    background-size:24px 24px;
   }
   /* blue band: header + hero */
   .band{--steel:#3B59A8;--plate:#2B4BAB;--ink:#F3F6FF;--muted:#DCE3F7;--layout:#FFFFFF;--layout-ink:#2E4C9E;--rule:rgba(255,255,255,.16);--rule-strong:rgba(255,255,255,.36);background-color:#3B59A8;color:var(--ink)}
-  .hero-band{background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:24px 24px}
   .wrap{width:min(1120px,100% - 32px);margin-inline:auto}
   h1,h2{font-family:var(--display);font-weight:700;margin:0;line-height:1}
   h1{font-size:clamp(2.6rem,6.6vw,5.6rem);font-stretch:135%;letter-spacing:-.02em;max-width:14ch}
